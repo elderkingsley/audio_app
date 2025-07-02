@@ -123,6 +123,60 @@ class MusicPlayerController extends Controller
     }
 
     /**
+     * Health check endpoint for monitoring
+     */
+    public function healthCheck(): JsonResponse
+    {
+        $checks = [
+            'app' => true,
+            'database' => false,
+            'storage' => false,
+            'bunny_cdn' => false,
+        ];
+
+        try {
+            // Database check
+            Track::count();
+            $checks['database'] = true;
+        } catch (\Exception $e) {
+            Log::error('Health check - Database failed: ' . $e->getMessage());
+        }
+
+        try {
+            // Storage check
+            $checks['storage'] = is_writable(storage_path('logs'));
+        } catch (\Exception $e) {
+            Log::error('Health check - Storage failed: ' . $e->getMessage());
+        }
+
+        try {
+            // Bunny CDN check
+            $testUrl = "https://{$this->bunnyCdnHostname}/";
+            $context = stream_context_create([
+                'http' => [
+                    'method' => 'HEAD',
+                    'timeout' => 5
+                ]
+            ]);
+            $headers = get_headers($testUrl, false, $context);
+            $checks['bunny_cdn'] = $headers && strpos($headers[0], '200') !== false;
+        } catch (\Exception $e) {
+            Log::error('Health check - Bunny CDN failed: ' . $e->getMessage());
+        }
+
+        $allHealthy = array_reduce($checks, function($carry, $check) {
+            return $carry && $check;
+        }, true);
+
+        return response()->json([
+            'status' => $allHealthy ? 'healthy' : 'unhealthy',
+            'timestamp' => now()->toISOString(),
+            'checks' => $checks,
+            'version' => '1.0.0'
+        ], $allHealthy ? 200 : 503);
+    }
+
+    /**
      * Sync tracks from Bunny.net storage
      */
     public function syncTracks(): JsonResponse

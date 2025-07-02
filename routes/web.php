@@ -23,11 +23,14 @@ Route::get('/working', function () {
     return view('music-working');
 })->name('working');
 
+// Health check endpoint
+Route::get('/health', [MusicPlayerController::class, 'healthCheck'])->name('health');
+
 // Admin routes
 Route::get('/admin/metadata', [MusicPlayerController::class, 'showMetadataManager'])->name('admin.metadata');
 
-// API Routes for music player
-Route::prefix('api/music')->group(function () {
+// API Routes for music player with rate limiting
+Route::prefix('api/music')->middleware(['api.rate_limit:api'])->group(function () {
     Route::get('tracks', [MusicPlayerController::class, 'getTracks'])->name('api.tracks');
     Route::get('tracks/{track}', [MusicPlayerController::class, 'getTrack'])->name('api.track');
     Route::get('genres', [MusicPlayerController::class, 'getGenres'])->name('api.genres');
@@ -36,10 +39,14 @@ Route::prefix('api/music')->group(function () {
     Route::get('stream/{track}', [MusicPlayerController::class, 'streamTrack'])->name('api.stream');
     Route::get('download/{track}', [MusicPlayerController::class, 'downloadTrack'])->name('api.download');
     Route::get('download-url/{track}', [MusicPlayerController::class, 'getDownloadUrl'])->name('api.download-url');
-    Route::post('sync', [MusicPlayerController::class, 'syncTracks'])->name('api.sync');
     Route::post('update-duration', [MusicPlayerController::class, 'updateDuration'])->name('api.update-duration');
     Route::patch('tracks/{track}', [MusicPlayerController::class, 'updateTrack'])->name('api.track.update');
     Route::post('tracks/bulk-update', [MusicPlayerController::class, 'bulkUpdateTracks'])->name('api.tracks.bulk-update');
+
+    // Sync endpoint with stricter rate limiting
+    Route::post('sync', [MusicPlayerController::class, 'syncTracks'])
+        ->middleware('api.rate_limit:sync')
+        ->name('api.sync');
 });
 
 Route::view('dashboard', 'dashboard')

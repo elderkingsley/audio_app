@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Global middleware
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+
+        // API middleware
+        $middleware->alias([
+            'api.rate_limit' => \App\Http\Middleware\ApiRateLimit::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

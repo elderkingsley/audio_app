@@ -123,4 +123,18 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Rate Limits
+    |--------------------------------------------------------------------------
+    |
+    | Configure rate limits for different API endpoints
+    |
+    */
+
+    'rate_limits' => [
+        'api' => env('API_RATE_LIMIT', 60),
+        'sync' => env('SYNC_RATE_LIMIT', 5),
+    ],
+
 ];

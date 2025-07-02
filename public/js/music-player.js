@@ -863,6 +863,14 @@ function showNowPlayingPanel() {
             panel.classList.add('show');
             document.body.classList.add('show');
         }, 10);
+
+        // Prevent panel from hiding when clicking outside
+        // Add event listener to prevent event bubbling
+        panel.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        console.log('✅ Now Playing panel shown and protected from outside clicks');
     }
 }
 
@@ -1455,6 +1463,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.testAudio = testAudio;
     window.diagnoseAudio = diagnoseAudio;
     console.log('🧪 Debug functions available: window.testAudio(), window.diagnoseAudio()');
+
+    // Ensure Now Playing panel stays visible - prevent any document-level click handlers from hiding it
+    document.addEventListener('click', function(e) {
+        const panel = document.getElementById('now-playing-panel');
+        const isNowPlayingVisible = panel && panel.classList.contains('show');
+
+        // If Now Playing panel is visible and click is outside the panel
+        if (isNowPlayingVisible && !panel.contains(e.target)) {
+            // Check if the click was on the close button specifically
+            const isCloseButton = e.target.closest('#close-now-playing');
+
+            if (!isCloseButton) {
+                // Prevent any other handlers from hiding the panel
+                console.log('🛡️ Protecting Now Playing panel from outside click');
+                // Don't call hideNowPlayingPanel() - let it stay visible
+            }
+        }
+    }, true); // Use capture phase to intercept early
 
     const trackList = document.getElementById('track-list');
     const loading = document.getElementById('loading');

@@ -183,7 +183,7 @@
             transform: translateX(-50%) translateY(-100px);
             width: calc(100% - 40px);
             max-width: 600px;
-            z-index: 50;
+            z-index: 9999;
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
             border-radius: 16px;
             box-shadow:
@@ -827,7 +827,7 @@
                                 </div>
                             </div>
 
-                            <p class="text-black text-opacity-60 text-xs">Use ← → or J L to skip ±15s • Space or K to play/pause</p>
+                            <p class="text-black text-opacity-60 text-xs">Use ← → or J L to skip ±15s • Space or K to play/pause • Panel stays visible</p>
                         </div>
                     </div>
 

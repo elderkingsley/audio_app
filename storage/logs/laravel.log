@@ -335,3 +335,4 @@
 [2025-07-01 21:17:25] local.INFO: Updated track duration {"track":"Lords Day 10","old_duration":1807,"new_duration":1807} 
 [2025-07-02 08:31:57] local.INFO: Bunny.net API Request {"url":"https://storage.bunnycdn.com/tec-cathecism/"} 
 [2025-07-02 08:31:58] local.INFO: Bunny.net API Response {"status":200,"file_count":9,"first_file":{"Guid":"212d8926-390e-413f-a9f0-aaa9bfc49fc2","StorageZoneName":"tec-cathecism","Path":"/tec-cathecism/","ObjectName":"Lords Day 10.mp3","Length":72308011,"LastChanged":"2025-07-01T20:56:32.073","ServerId":1106,"ArrayNumber":0,"IsDirectory":false,"UserId":"c3be5f11-4228-469d-bf89-c4aba9b84ac9","ContentType":"","DateCreated":"2025-07-01T20:56:32.073","StorageZoneId":1097998,"Checksum":"2F476F456EBF3FDA39619916C02D514FF19EDAFC12C6BE95C1E635ED0FDDB8F3","ReplicatedZones":"UK,LA"}} 
+[2025-07-02 08:55:37] local.INFO: Updated track duration {"track":"Lord's Day 2","old_duration":1454,"new_duration":1454} 

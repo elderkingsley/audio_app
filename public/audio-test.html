@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        button {
+            background: #fbbf24;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        audio {
+            width: 100%;
+            margin: 20px 0;
+        }
+        .log {
+            background: #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Playback Test</h1>
+    
+    <button onclick="testDirectAudio()">Test Direct Audio URL</button>
+    <button onclick="testViaAPI()">Test Via API</button>
+    <button onclick="clearLog()">Clear Log</button>
+    
+    <audio id="test-audio" controls>
+        Your browser does not support the audio element.
+    </audio>
+    
+    <div id="log" class="log">Ready to test audio playback...\n</div>
+
+    <script>
+        const log = document.getElementById('log');
+        const audio = document.getElementById('test-audio');
+        
+        function addLog(message) {
+            log.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function clearLog() {
+            log.textContent = 'Log cleared...\n';
+        }
+        
+        function testDirectAudio() {
+            addLog('Testing direct audio URL...');
+            const testUrl = 'https://tec-cathecism.b-cdn.net/Lords%20Day%202.mp3';
+            
+            audio.src = testUrl;
+            addLog('Set audio source to: ' + testUrl);
+            
+            audio.load();
+            addLog('Audio loaded, attempting to play...');
+            
+            audio.play()
+                .then(() => {
+                    addLog('✅ Audio playing successfully!');
+                })
+                .catch(error => {
+                    addLog('❌ Failed to play audio: ' + error.message);
+                    addLog('Error details: ' + JSON.stringify({
+                        name: error.name,
+                        code: error.code,
+                        message: error.message
+                    }));
+                });
+        }
+        
+        function testViaAPI() {
+            addLog('Testing via API...');
+            
+            fetch('/api/music/tracks')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.data && data.data.length > 0) {
+                        const track = data.data[0];
+                        addLog('Got track from API: ' + track.title);
+                        addLog('Streaming URL: ' + track.streaming_url);
+                        
+                        audio.src = track.streaming_url;
+                        audio.load();
+                        
+                        return audio.play();
+                    } else {
+                        throw new Error('No tracks found in API response');
+                    }
+                })
+                .then(() => {
+                    addLog('✅ API audio playing successfully!');
+                })
+                .catch(error => {
+                    addLog('❌ API test failed: ' + error.message);
+                });
+        }
+        
+        // Add audio event listeners
+        audio.addEventListener('loadstart', () => addLog('🔄 Loading started'));
+        audio.addEventListener('loadeddata', () => addLog('📥 Data loaded'));
+        audio.addEventListener('loadedmetadata', () => addLog('📊 Metadata loaded'));
+        audio.addEventListener('canplay', () => addLog('▶️ Can start playing'));
+        audio.addEventListener('canplaythrough', () => addLog('🎵 Can play through'));
+        audio.addEventListener('play', () => addLog('▶️ Play event fired'));
+        audio.addEventListener('pause', () => addLog('⏸️ Pause event fired'));
+        audio.addEventListener('ended', () => addLog('🏁 Playback ended'));
+        audio.addEventListener('error', (e) => {
+            addLog('❌ Audio error: ' + (audio.error ? audio.error.message : 'Unknown error'));
+            addLog('Error code: ' + (audio.error ? audio.error.code : 'Unknown'));
+        });
+        
+        addLog('Audio test page loaded. Click buttons to test playback.');
+    </script>
+</body>
+</html>

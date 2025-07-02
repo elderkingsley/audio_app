@@ -1,0 +1,222 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
+
+/* Music Player Custom Styles - Black & Yellow Theme */
+@layer components {
+    .music-player-gradient {
+        background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #fbbf24 100%);
+    }
+
+    .track-item {
+        transition: all 0.2s ease-in-out;
+    }
+
+    .track-item:hover {
+        transform: translateX(4px);
+        background: rgba(251, 191, 36, 0.05);
+    }
+
+    .track-item.playing {
+        background: linear-gradient(90deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%);
+        border-left: 4px solid #fbbf24;
+    }
+
+    .volume-slider {
+        background: linear-gradient(to right, #fbbf24 0%, #fbbf24 50%, #374151 50%, #374151 100%);
+        -webkit-appearance: none;
+        appearance: none;
+        height: 8px;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fbbf24;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .volume-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fbbf24;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-container {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .progress-container:hover {
+        transform: scaleY(1.2);
+    }
+
+    .loading-spinner {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pulse-on-play {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+
+    .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.85);
+        border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+
+    .yellow-accent {
+        color: #fbbf24;
+    }
+
+    .yellow-bg {
+        background-color: #fbbf24;
+    }
+
+    .yellow-border {
+        border-color: #fbbf24;
+    }
+
+    .black-bg {
+        background-color: #000000;
+    }
+
+    .mobile-player-controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .mobile-track-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(251, 191, 36, 0.1);
+    }
+
+    .mobile-track-item:last-child {
+        border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+        .desktop-only {
+            display: none !important;
+        }
+
+        .mobile-only {
+            display: block !important;
+        }
+
+        .mobile-flex {
+            display: flex !important;
+        }
+    }
+
+    @media (min-width: 769px) {
+        .mobile-only {
+            display: none !important;
+        }
+
+        .mobile-player-controls {
+            position: relative;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px;
+        }
+    }
+}
